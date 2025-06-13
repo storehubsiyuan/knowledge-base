@@ -1,0 +1,10 @@
+Based on the provided code, please explain in detail how tax calculations work in the BackOffice system. Include:
+
+1. How tax is calculated based on the selected tax code
+2. The difference between tax-inclusive and tax-exclusive pricing
+3. How tax amounts are displayed to users
+4. How changing a tax code affects the final price
+5. Any rounding rules that apply to tax calculations
+6. How the system handles zero-rated or tax-exempt items
+
+Explain the concepts in simple terms with examples that a non-technical user can understand. Focus on what users will see on their screen and how they can correctly set up their tax calculations. 

@@ -1,0 +1,51 @@
+You are an expert technical writer with deep knowledge of StorehHub's BackOffice product. Your task is to analyze the provided code snippets and write clear, comprehensive user documentation for the Stores Management feature.
+
+The documentation should be written for business managers and store administrators who use the BackOffice platform to manage their retail stores. They are not technical users and need straightforward, task-oriented instructions.
+
+Please cover the following aspects of the Stores Management feature based on the code provided:
+
+1. Introduction to the Stores Management module
+   - What is it used for?
+   - Who typically uses it?
+   - Why is it important for retail businesses?
+
+2. Main features and capabilities
+   - Creating and editing store profiles
+   - Configuring store settings
+   - Managing multiple stores (if applicable)
+   - Understanding store status and attributes
+
+3. Step-by-step user instructions
+   - How to access the Stores Management section
+   - How to create a new store
+   - How to edit existing store information
+   - How to configure store-specific settings
+   - How to manage store status (active/inactive)
+
+4. Common tasks and workflows
+   - Setting up a new store location
+   - Updating store hours
+   - Changing store contact information
+   - Managing store administrators/staff
+
+5. Best practices and tips
+   - Recommended approach for multi-store setup
+   - Tips for efficient store management
+   - Common pitfalls to avoid
+
+6. Relationship with other BackOffice modules
+   - How Stores Management connects with Tax settings
+   - How Stores Management relates to User permissions
+   - Integration with inventory and sales reporting
+
+The documentation should be:
+- Clear and concise
+- Written in simple, non-technical language
+- Task-focused (organized around what users want to accomplish)
+- Comprehensive (covering all major features visible in the code)
+- Accurate (based solely on the code provided, not assumptions)
+
+Include relevant screenshots if indicated in the code, and structure the documentation with appropriate headings, bullet points, and numbered steps for procedures.
+
+CODE SNIPPETS:
+[The code snippets from the extractors will be inserted here] 

@@ -1,0 +1,10 @@
+Based on the provided code, please explain in detail how default tax codes work in the BackOffice system. Include:
+
+1. How to set a default tax code (if this functionality exists)
+2. How default tax codes are applied to new products
+3. How the system indicates that a default tax code is being used
+4. How to override a default tax code on specific products or promotions
+5. What happens when a default tax code is changed
+6. Any country-specific considerations for default tax codes
+
+Describe the process from an end-user's perspective, focusing on the actions they need to take and what they'll see on screen. Include best practices for using default tax codes effectively. 

@@ -1,0 +1,10 @@
+Based on the provided code, please explain in detail how a user would create a new tax code in the BackOffice system. Include:
+
+1. How to navigate to the tax code creation screen
+2. The step-by-step process for creating a tax code
+3. What each field means (name, rate, etc.)
+4. Any validation rules that apply
+5. How to save the new tax code
+6. What happens after saving
+
+Describe the process from an end-user's perspective, focusing on the actions they need to take and what they'll see on screen. Include any special considerations for different countries if relevant. 

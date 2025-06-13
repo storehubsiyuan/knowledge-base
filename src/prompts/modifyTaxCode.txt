@@ -1,0 +1,10 @@
+Based on the provided code, please explain in detail how a user would modify an existing tax code in the BackOffice system. Include:
+
+1. How to navigate to the tax code management screen
+2. How to select a tax code for editing
+3. Which fields can be modified and what restrictions apply
+4. How to save changes to a tax code
+5. What happens to products and promotions that use a modified tax code
+6. Any validation rules that apply when modifying a tax code
+
+Describe the process from an end-user's perspective, focusing on the actions they need to take and what they'll see on screen. Include any warnings or considerations users should be aware of when modifying tax codes. 

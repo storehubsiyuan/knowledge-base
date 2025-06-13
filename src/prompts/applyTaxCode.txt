@@ -1,0 +1,10 @@
+Based on the provided code, please explain in detail how a user would apply a tax code to products and promotions in the BackOffice system. Include:
+
+1. How to select a tax code when creating or editing a product
+2. How to select a tax code when creating or editing a promotion
+3. How the tax code selection affects pricing calculations
+4. The difference between tax-inclusive and tax-exclusive pricing
+5. How to verify that the correct tax code is applied
+6. How default tax codes work (if applicable)
+
+Describe the process from an end-user's perspective, focusing on the actions they need to take and what they'll see on screen. Include screenshots or UI descriptions where helpful. 
