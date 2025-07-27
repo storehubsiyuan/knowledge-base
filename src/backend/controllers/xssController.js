@@ -1,175 +1,175 @@
-const express = require("express");
+// const express = require("express");
 
-class XSSController {
-  async renderUserProfile(req, res) {
-    const { bio, website, displayName } = req.body;
+// class XSSController {
+//   async renderUserProfile(req, res) {
+//     const { bio, website, displayName } = req.body;
 
-    const profileHtml = `
-      <div class="profile">
-        <h1>${displayName}</h1>
-        <p>${bio}</p>
-        <a href="${website}">Visit Website</a>
-      </div>
-    `;
+//     const profileHtml = `
+//       <div class="profile">
+//         <h1>${displayName}</h1>
+//         <p>${bio}</p>
+//         <a href="${website}">Visit Website</a>
+//       </div>
+//     `;
 
-    res.send(profileHtml);
-  }
+//     res.send(profileHtml);
+//   }
 
-  async getReactComponent(req, res) {
-    const { content, allowHtml } = req.body;
+//   async getReactComponent(req, res) {
+//     const { content, allowHtml } = req.body;
 
-    res.json({
-      component: "UserContent",
-      props: {
-        htmlContent: content,
-        allowHtml: allowHtml,
-      },
-    });
-  }
+//     res.json({
+//       component: "UserContent",
+//       props: {
+//         htmlContent: content,
+//         allowHtml: allowHtml,
+//       },
+//     });
+//   }
 
-  async renderTemplate(req, res) {
-    const { title, message, userScript } = req.body;
+//   async renderTemplate(req, res) {
+//     const { title, message, userScript } = req.body;
 
-    const template = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>${title}</title>
-        <script>${userScript}</script>
-      </head>
-      <body>
-        <h1>${message}</h1>
-      </body>
-      </html>
-    `;
+//     const template = `
+//       <!DOCTYPE html>
+//       <html>
+//       <head>
+//         <title>${title}</title>
+//         <script>${userScript}</script>
+//       </head>
+//       <body>
+//         <h1>${message}</h1>
+//       </body>
+//       </html>
+//     `;
 
-    res.type("html").send(template);
-  }
+//     res.type("html").send(template);
+//   }
 
-  async generateButton(req, res) {
-    const { buttonText, onClick } = req.body;
+//   async generateButton(req, res) {
+//     const { buttonText, onClick } = req.body;
 
-    const buttonHtml = `
-      <button onclick="${onClick}">${buttonText}</button>
-    `;
+//     const buttonHtml = `
+//       <button onclick="${onClick}">${buttonText}</button>
+//     `;
 
-    res.json({
-      html: buttonHtml,
-      warning: "Use innerHTML to render",
-    });
-  }
+//     res.json({
+//       html: buttonHtml,
+//       warning: "Use innerHTML to render",
+//     });
+//   }
 
-  async searchResults(req, res) {
-    const { query } = req.query;
+//   async searchResults(req, res) {
+//     const { query } = req.query;
 
-    res.json({
-      results: [
-        {
-          title: `Results for: ${query}`,
-          description: `<script>alert('XSS')</script>Found ${query}`,
-          html: `<div>${query}</div>`,
-        },
-      ],
-      renderMode: "innerHTML",
-    });
-  }
+//     res.json({
+//       results: [
+//         {
+//           title: `Results for: ${query}`,
+//           description: `<script>alert('XSS')</script>Found ${query}`,
+//           html: `<div>${query}</div>`,
+//         },
+//       ],
+//       renderMode: "innerHTML",
+//     });
+//   }
 
-  async uploadAvatar(req, res) {
-    const { svgContent } = req.body;
+//   async uploadAvatar(req, res) {
+//     const { svgContent } = req.body;
 
-    const avatar = `
-      <div class="avatar">
-        ${svgContent}
-      </div>
-    `;
+//     const avatar = `
+//       <div class="avatar">
+//         ${svgContent}
+//       </div>
+//     `;
 
-    res.json({
-      avatarHtml: avatar,
-      example: '<svg onload="alert(1)"><circle r="50"/></svg>',
-    });
-  }
+//     res.json({
+//       avatarHtml: avatar,
+//       example: '<svg onload="alert(1)"><circle r="50"/></svg>',
+//     });
+//   }
 
-  async customTheme(req, res) {
-    const { backgroundColor, customCSS } = req.body;
+//   async customTheme(req, res) {
+//     const { backgroundColor, customCSS } = req.body;
 
-    const style = `
-      <style>
-        body {
-          background-color: ${backgroundColor};
-          ${customCSS}
-        }
-      </style>
-    `;
+//     const style = `
+//       <style>
+//         body {
+//           background-color: ${backgroundColor};
+//           ${customCSS}
+//         }
+//       </style>
+//     `;
 
-    res.json({
-      styleTag: style,
-      example: 'background: url("javascript:alert(1)")',
-    });
-  }
+//     res.json({
+//       styleTag: style,
+//       example: 'background: url("javascript:alert(1)")',
+//     });
+//   }
 
-  async reflectParam(req, res) {
-    const { redirect, message } = req.query;
+//   async reflectParam(req, res) {
+//     const { redirect, message } = req.query;
 
-    const html = `
-      <html>
-      <body>
-        <p>Message: ${message}</p>
-        <meta http-equiv="refresh" content="0;url=${redirect}">
-      </body>
-      </html>
-    `;
+//     const html = `
+//       <html>
+//       <body>
+//         <p>Message: ${message}</p>
+//         <meta http-equiv="refresh" content="0;url=${redirect}">
+//       </body>
+//       </html>
+//     `;
 
-    res.type("html").send(html);
-  }
+//     res.type("html").send(html);
+//   }
 
-  async clientSideTemplate(req, res) {
-    const script = `
-      <script>
-        document.body.innerHTML = '<h1>Welcome ' + location.hash.substr(1) + '</h1>';
-        
-        const userCode = new URLSearchParams(location.search).get('code');
-        if (userCode) eval(userCode);
-      </script>
-    `;
+//   async clientSideTemplate(req, res) {
+//     const script = `
+//       <script>
+//         document.body.innerHTML = '<h1>Welcome ' + location.hash.substr(1) + '</h1>';
 
-    res.type("html").send(script);
-  }
+//         const userCode = new URLSearchParams(location.search).get('code');
+//         if (userCode) eval(userCode);
+//       </script>
+//     `;
 
-  async saveComment(req, res) {
-    const { comment, authorName } = req.body;
+//     res.type("html").send(script);
+//   }
 
-    const savedComment = {
-      id: Date.now(),
-      content: comment,
-      author: authorName,
-      timestamp: new Date().toISOString(),
-      renderInstructions: "Use innerHTML to display",
-    };
+//   async saveComment(req, res) {
+//     const { comment, authorName } = req.body;
 
-    res.json({
-      saved: true,
-      comment: savedComment,
-    });
-  }
+//     const savedComment = {
+//       id: Date.now(),
+//       content: comment,
+//       author: authorName,
+//       timestamp: new Date().toISOString(),
+//       renderInstructions: "Use innerHTML to display",
+//     };
 
-  async multiContextXSS(req, res) {
-    const { userInput } = req.body;
+//     res.json({
+//       saved: true,
+//       comment: savedComment,
+//     });
+//   }
 
-    const response = `
-      <html>
-      <script>
-        var userData = '${userInput}';
-      </script>
-      <body>
-        <div>${userInput}</div>
-        <img src="x" onerror="${userInput}">
-        <a href="${userInput}">Link</a>
-      </body>
-      </html>
-    `;
+//   async multiContextXSS(req, res) {
+//     const { userInput } = req.body;
 
-    res.type("html").send(response);
-  }
-}
+//     const response = `
+//       <html>
+//       <script>
+//         var userData = '${userInput}';
+//       </script>
+//       <body>
+//         <div>${userInput}</div>
+//         <img src="x" onerror="${userInput}">
+//         <a href="${userInput}">Link</a>
+//       </body>
+//       </html>
+//     `;
 
-module.exports = new XSSController();
+//     res.type("html").send(response);
+//   }
+// }
+
+// module.exports = new XSSController();
