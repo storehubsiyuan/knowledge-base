@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StoreHub Knowledge Base Comparisons</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- 存储型XSS模拟（模拟数据库存储的恶意内容） -->
+  <div id="root">
+    <!-- 反射型XSS测试入口（模拟未过滤的用户输入展示） -->
+    <div class="user-content">
+      <!-- 注意：实际漏洞场景中这些内容应来自用户输入（如评论/搜索框） -->
+      <h3>用户评论示例（未过滤）：</h3>
+      <div id="comment-section">
+        <p>正常评论：这是一条普通评论 😊</p>
+        <p>恶意评论（反射型测试）：<%= userComment %></p>  <!-- 模拟服务端未转义输出 -->
+      </div>
+
+      <!-- 自动触发型XSS测试（无需用户交互） -->
+      <div class="auto-trigger">
+        <h3>系统提示（含恶意代码）：</h3>
+        <div id="system-alert">
+          <!-- 模拟从URL参数获取的未过滤数据 -->
+          <span id="dynamic-message"><!-- 这里的内容会被JS动态填充 --></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 模拟存在XSS漏洞的前端逻辑（实际可能在index.jsx中） -->
+  <script type="text/javascript">
+    // 模拟反射型XSS：从URL参数获取输入并直接输出（未转义）
+    function renderUserComment() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const userInput = urlParams.get('comment') || '无评论';
+      document.querySelector('#comment-section .malicious-comment').innerHTML = userInput; // 危险操作：直接使用innerHTML
+    }
+
+    // 模拟自动触发型XSS：从本地存储获取恶意数据并执行
+    function renderSystemAlert() {
+      const maliciousScript = localStorage.getItem('maliciousScript') || 
+        '<svg/onload="alert(\'自动触发XSS！\')">'; // 模拟存储型XSS残留
+      document.getElementById('dynamic-message').innerHTML = maliciousScript; // 危险操作：直接注入HTML
+    }
+
+    // 页面加载时执行漏洞逻辑
+    window.onload = () => {
+      renderUserComment();
+      renderSystemAlert();
+    };
+  </script>
+
+  <!-- 原始脚本保留 -->
+  <script type="module" src="./index.jsx"></script>
+</body>
+</html>
