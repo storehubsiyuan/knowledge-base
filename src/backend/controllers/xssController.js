@@ -1,206 +1,175 @@
-const express = require("express");
+// const express = require("express");
 
-class XSSController {
-  // VULNERABLE: Direct HTML rendering without escaping
-  async renderUserProfile(req, res) {
-    const { bio, website, displayName } = req.body;
+// class XSSController {
+//   async renderUserProfile(req, res) {
+//     const { bio, website, displayName } = req.body;
 
-    // Bug: Direct HTML interpolation
-    const profileHtml = `
-      <div class="profile">
-        <h1>${displayName}</h1>
-        <p>${bio}</p>
-        <a href="${website}">Visit Website</a>
-      </div>
-    `;
+//     const profileHtml = `
+//       <div class="profile">
+//         <h1>${displayName}</h1>
+//         <p>${bio}</p>
+//         <a href="${website}">Visit Website</a>
+//       </div>
+//     `;
 
-    res.send(profileHtml); // Vulnerable to XSS
-  }
+//     res.send(profileHtml);
+//   }
 
-  // VULNERABLE: React dangerouslySetInnerHTML misuse
-  async getReactComponent(req, res) {
-    const { content, allowHtml } = req.body;
+//   async getReactComponent(req, res) {
+//     const { content, allowHtml } = req.body;
 
-    // Bug: Sending unescaped HTML for React
-    res.json({
-      component: "UserContent",
-      props: {
-        // This will be used with dangerouslySetInnerHTML
-        htmlContent: content,
-        allowHtml: allowHtml,
-      },
-    });
-  }
+//     res.json({
+//       component: "UserContent",
+//       props: {
+//         htmlContent: content,
+//         allowHtml: allowHtml,
+//       },
+//     });
+//   }
 
-  // VULNERABLE: Template string injection
-  async renderTemplate(req, res) {
-    const { title, message, userScript } = req.body;
+//   async renderTemplate(req, res) {
+//     const { title, message, userScript } = req.body;
 
-    // Bug: User input in template literal
-    const template = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>${title}</title>
-        <script>${userScript}</script>
-      </head>
-      <body>
-        <h1>${message}</h1>
-      </body>
-      </html>
-    `;
+//     const template = `
+//       <!DOCTYPE html>
+//       <html>
+//       <head>
+//         <title>${title}</title>
+//         <script>${userScript}</script>
+//       </head>
+//       <body>
+//         <h1>${message}</h1>
+//       </body>
+//       </html>
+//     `;
 
-    res.type("html").send(template);
-  }
+//     res.type("html").send(template);
+//   }
 
-  // VULNERABLE: Event handler injection
-  async generateButton(req, res) {
-    const { buttonText, onClick } = req.body;
+//   async generateButton(req, res) {
+//     const { buttonText, onClick } = req.body;
 
-    // Bug: User-controlled event handler
-    const buttonHtml = `
-      <button onclick="${onClick}">${buttonText}</button>
-    `;
+//     const buttonHtml = `
+//       <button onclick="${onClick}">${buttonText}</button>
+//     `;
 
-    res.json({
-      html: buttonHtml,
-      warning: "Use innerHTML to render",
-    });
-  }
+//     res.json({
+//       html: buttonHtml,
+//       warning: "Use innerHTML to render",
+//     });
+//   }
 
-  // VULNERABLE: JSON response with script tags
-  async searchResults(req, res) {
-    const { query } = req.query;
+//   async searchResults(req, res) {
+//     const { query } = req.query;
 
-    // Bug: Not escaping in JSON response
-    res.json({
-      results: [
-        {
-          title: `Results for: ${query}`,
-          // Script tag in JSON
-          description: `<script>alert('XSS')</script>Found ${query}`,
-          html: `<div>${query}</div>`,
-        },
-      ],
-      renderMode: "innerHTML", // Hint to use innerHTML
-    });
-  }
+//     res.json({
+//       results: [
+//         {
+//           title: `Results for: ${query}`,
+//           description: `<script>alert('XSS')</script>Found ${query}`,
+//           html: `<div>${query}</div>`,
+//         },
+//       ],
+//       renderMode: "innerHTML",
+//     });
+//   }
 
-  // VULNERABLE: SVG XSS
-  async uploadAvatar(req, res) {
-    const { svgContent } = req.body;
+//   async uploadAvatar(req, res) {
+//     const { svgContent } = req.body;
 
-    // Bug: Not sanitizing SVG
-    const avatar = `
-      <div class="avatar">
-        ${svgContent}
-      </div>
-    `;
+//     const avatar = `
+//       <div class="avatar">
+//         ${svgContent}
+//       </div>
+//     `;
 
-    res.json({
-      avatarHtml: avatar,
-      // SVG can contain scripts
-      example: '<svg onload="alert(1)"><circle r="50"/></svg>',
-    });
-  }
+//     res.json({
+//       avatarHtml: avatar,
+//       example: '<svg onload="alert(1)"><circle r="50"/></svg>',
+//     });
+//   }
 
-  // VULNERABLE: CSS injection
-  async customTheme(req, res) {
-    const { backgroundColor, customCSS } = req.body;
+//   async customTheme(req, res) {
+//     const { backgroundColor, customCSS } = req.body;
 
-    // Bug: User-controlled CSS
-    const style = `
-      <style>
-        body {
-          background-color: ${backgroundColor};
-          ${customCSS}
-        }
-      </style>
-    `;
+//     const style = `
+//       <style>
+//         body {
+//           background-color: ${backgroundColor};
+//           ${customCSS}
+//         }
+//       </style>
+//     `;
 
-    res.json({
-      styleTag: style,
-      // CSS can execute JavaScript
-      example: 'background: url("javascript:alert(1)")',
-    });
-  }
+//     res.json({
+//       styleTag: style,
+//       example: 'background: url("javascript:alert(1)")',
+//     });
+//   }
 
-  // VULNERABLE: URL parameter reflection
-  async reflectParam(req, res) {
-    const { redirect, message } = req.query;
+//   async reflectParam(req, res) {
+//     const { redirect, message } = req.query;
 
-    // Bug: Reflecting URL params without encoding
-    const html = `
-      <html>
-      <body>
-        <p>Message: ${message}</p>
-        <meta http-equiv="refresh" content="0;url=${redirect}">
-      </body>
-      </html>
-    `;
+//     const html = `
+//       <html>
+//       <body>
+//         <p>Message: ${message}</p>
+//         <meta http-equiv="refresh" content="0;url=${redirect}">
+//       </body>
+//       </html>
+//     `;
 
-    res.type("html").send(html);
-  }
+//     res.type("html").send(html);
+//   }
 
-  // VULNERABLE: DOM XSS via location.hash
-  async clientSideTemplate(req, res) {
-    // Bug: Client-side template uses location.hash directly
-    const script = `
-      <script>
-        // Vulnerable: using location.hash without encoding
-        document.body.innerHTML = '<h1>Welcome ' + location.hash.substr(1) + '</h1>';
-        
-        // Also vulnerable: eval with user input
-        const userCode = new URLSearchParams(location.search).get('code');
-        if (userCode) eval(userCode);
-      </script>
-    `;
+//   async clientSideTemplate(req, res) {
+//     const script = `
+//       <script>
+//         document.body.innerHTML = '<h1>Welcome ' + location.hash.substr(1) + '</h1>';
 
-    res.type("html").send(script);
-  }
+//         const userCode = new URLSearchParams(location.search).get('code');
+//         if (userCode) eval(userCode);
+//       </script>
+//     `;
 
-  // VULNERABLE: Stored XSS simulation
-  async saveComment(req, res) {
-    const { comment, authorName } = req.body;
+//     res.type("html").send(script);
+//   }
 
-    // Bug: Storing raw HTML
-    const savedComment = {
-      id: Date.now(),
-      // These will be rendered as HTML later
-      content: comment,
-      author: authorName,
-      timestamp: new Date().toISOString(),
-      // Hint that this is rendered unsafely
-      renderInstructions: "Use innerHTML to display",
-    };
+//   async saveComment(req, res) {
+//     const { comment, authorName } = req.body;
 
-    // In real app, this would be saved to DB
-    res.json({
-      saved: true,
-      comment: savedComment,
-    });
-  }
+//     const savedComment = {
+//       id: Date.now(),
+//       content: comment,
+//       author: authorName,
+//       timestamp: new Date().toISOString(),
+//       renderInstructions: "Use innerHTML to display",
+//     };
 
-  // VULNERABLE: Multiple encoding contexts
-  async multiContextXSS(req, res) {
-    const { userInput } = req.body;
+//     res.json({
+//       saved: true,
+//       comment: savedComment,
+//     });
+//   }
 
-    // Bug: Same input used in multiple contexts
-    const response = `
-      <html>
-      <script>
-        var userData = '${userInput}'; // JS context
-      </script>
-      <body>
-        <div>${userInput}</div> <!-- HTML context -->
-        <img src="x" onerror="${userInput}"> <!-- Event handler context -->
-        <a href="${userInput}">Link</a> <!-- URL context -->
-      </body>
-      </html>
-    `;
+//   async multiContextXSS(req, res) {
+//     const { userInput } = req.body;
 
-    res.type("html").send(response);
-  }
-}
+//     const response = `
+//       <html>
+//       <script>
+//         var userData = '${userInput}';
+//       </script>
+//       <body>
+//         <div>${userInput}</div>
+//         <img src="x" onerror="${userInput}">
+//         <a href="${userInput}">Link</a>
+//       </body>
+//       </html>
+//     `;
 
-module.exports = new XSSController();
+//     res.type("html").send(response);
+//   }
+// }
+
+// module.exports = new XSSController();
