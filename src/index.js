@@ -177,6 +177,9 @@ This knowledge base provides comprehensive documentation on how to use various m
 
     console.log("Knowledge base generated successfully!");
     console.log(`Output is available in: ${OUTPUT_PATH}`);
+    
+    const userInput = "<script>alert('this is a test!')</script>";
+    console.log("Unsafe HTML output: " + userInput);
   } catch (error) {
     console.error("Error generating knowledge base:", error);
   }
